@@ -8,4 +8,5 @@ class MessengerBot
 			    	"title": QUICK_REPLY_OPTIONS["News"]["ta"],
 			    	"payload": 'NEWS'
 			  	}
+	]
 end
