@@ -8,16 +8,10 @@ require_relative 'json_templates/template'
 
 class MessengerBot
 
-	# Get faqs from api
-	def self.get_faq_contents 
-		faq_response = HTTParty.get(FAQ_URL)
-		faq_response = JSON[faq_response.to_s]
-		return faq_response["faqs"]
-	end
-
 	def self.get_faqs(language)
-		faq_contents = get_faq_contents
-		puts faq_contents
+		faq_response = JSON[HTTParty.get(FAQ_URL).to_s]
+		faq_contents = faq_response["faqs"]
+		puts "FAQ Contents: " + faq_contents
 		faq_template = GENERIC_TEMPLATE_BODY
 		elements = []
 		(0..9).each { |i|
@@ -42,7 +36,9 @@ class MessengerBot
 	end
 
 	def self.get_faqs_answer(uniqueId,language)
-		faq_contents = get_faq_contents
+		faq_response = JSON[HTTParty.get(FAQ_URL).to_s]
+		faq_contents = faq_response["faqs"]
+		puts "FAQ Contents: " + faq_contents
 		elements = []
 		summary = nil
 		(0..9).each { |i|

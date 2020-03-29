@@ -9,6 +9,7 @@ require_relative 'json_templates/template'
 require_relative 'json_templates/quick_replies'
 require_relative './news.rb'
 require_relative './faq.rb'
+require_relative './helpdesk_number'
 require_relative 'strings'
 
 
@@ -56,7 +57,7 @@ class MessengerBot
 			recipient: { id: id},
 			message: {
 				text: QUICK_REPLY_HEADER["#{@language}"],
-				quick_replies: QUICK_REPLIES["#{@language}"] 
+				quick_replies: get_quick_replies(@language)
 			}
 		}
 	 	response = HTTParty.post(FB_MESSAGE, headers: HEADER, body: message_options.to_json)
@@ -80,7 +81,7 @@ class MessengerBot
  	# This method is used to get the language of the user set in the Facebook.
  	#
  	def self.get_language(id)
- 		# Rewrite this with get from user preference with the language setting
+ 		# TODO Rewrite this with get from user preference with the language setting
  		fb_profile_url = FB_PROFILE + id + FB_PROFILE_FIELDS
  		profile_details = HTTParty.get(fb_profile_url)
  		locale = profile_details["locale"]
@@ -113,6 +114,7 @@ class MessengerBot
 				handle_wit_response(id,message)
 			end
 		rescue
+			puts "Error occured inside handle_message"
 			say(id,UNABLE_TO_GET_THE_CONTENT["#{@language}"])
 		end
 	end
@@ -149,14 +151,13 @@ class MessengerBot
 				send_quick_reply(id)
 			when "NEWS"
 				news_contents = get_news(@language)
-				puts news_contents
 				post_template(id,news_contents)
 			when "FAQ"
 				faq_contents = get_faqs(@language)
-				puts faq_contents
 				post_template(id,faq_contents)
 			when "STATS"
 			when "HELPDESK_NUMBER"
+				say(id,get_helpdesk_number(@language))
 			when "PREVENTION_METHODS"
 			when "DOCTORS_ADVICE"
 			when "ABOUT_THE_VIRUS"
@@ -170,10 +171,9 @@ class MessengerBot
 	end
 
 	def self.handle_get_summary_postbacks(id,postback)
-		puts "inside handle summary"
 		if postback.include? "GET_NEWS_SUMMARY_"
 			uniqueId = postback.delete("GET_NEWS_SUMMARY_")
-			puts uniqueId
+			puts "Get news summary uniqueid: " + uniqueId
 			summary = get_news_summary(uniqueId,@language)
 			if summary == nil
 				summary = UNABLE_TO_GET_THE_CONTENT["#{@language}"]
@@ -183,7 +183,7 @@ class MessengerBot
 
 		if postback.include? "GET_FAQ_ANSWER_SUMMARY_"
 			uniqueId = postback.delete("GET_FAQ_ANSWER_SUMMARY_")
-			puts uniqueId 
+			puts "FAQ uniqueid: " + uniqueId 
 			answer = get_faqs_answer(uniqueId,@language)
 			if answer == nil
 				answer = UNABLE_TO_GET_THE_CONTENT["#{@language}"]
@@ -197,8 +197,8 @@ class MessengerBot
 		subscribed_fields: %w[messages messaging_postbacks])
 	greeting_response 		 =HTTParty.post(FB_PAGE,  headers: HEADER, body: GREETING.to_json )
 	get_started_response	 =HTTParty.post(FB_PAGE,  headers: HEADER, body: GET_STARTED.to_json)
-	persistent_menu_response =HTTParty.post(FB_PAGE, headers: HEADER, body: PERSISTENT_MENU.to_json)
-	
+	persistent_menu_response =HTTParty.post(FB_PAGE, headers: HEADER, body: get_persistent_menu.to_json)
+
 	# Triggers whenever the bot gets any messages from the facebook user.
 	Bot.on :message do |message|
 		puts "Received a message: " + message.text
@@ -228,7 +228,7 @@ class MessengerBot
         "message": "#{template.to_json}"
         }
 		res = HTTParty.post(FB_MESSAGE, headers: HEADER, body: message_options.to_json)
-		puts res
+		puts "Posted message template response: " + res
 	end
 
 end

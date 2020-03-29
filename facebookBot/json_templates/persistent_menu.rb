@@ -3,7 +3,7 @@ require_relative "../strings"
 # @author Balaji
 class MessengerBot
 
-	def self.get_persistent_menu(hey) 
+	def self.get_persistent_menu
 		persistent_menu_elements = []
 		SUPPORTED_LANGUAGE.each { |language,locale|
 			puts language
