@@ -83,12 +83,12 @@ class MessengerBot
 
 	# Persistant menu button texts - HelpDesk number
 	HELPDESK_NUMBER = {
-		"en" => "HelpDesk Number",
+		"en" => "Helpdesk Number",
 		"ta" => "உதவி மைய எண்"
 	}
 
 	ABOUT_THE_VIRUS = {
-		"en" => "About the virus",
+		"en" => "About The Virus",
 		"ta" => "வைரஸ் பற்றி"
 	}
 

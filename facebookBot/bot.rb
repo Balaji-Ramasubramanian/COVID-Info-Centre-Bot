@@ -158,6 +158,8 @@ class MessengerBot
 			when "STATS"
 			when "HELPDESK_NUMBER"
 				say(id,get_helpdesk_number(@language))
+			when "MAIN_MENU"
+				send_quick_reply(id)
 			when "PREVENTION_METHODS"
 			when "DOCTORS_ADVICE"
 			when "ABOUT_THE_VIRUS"
