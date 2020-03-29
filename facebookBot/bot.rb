@@ -8,6 +8,7 @@ require_relative 'json_templates/get_started'
 require_relative 'json_templates/template'
 require_relative 'json_templates/quick_replies'
 require_relative './news.rb'
+require_relative './faq.rb'
 require_relative 'strings'
 
 
@@ -127,6 +128,7 @@ class MessengerBot
 		if wit_response.class == String then
 			handle_postback(id,wit_response)
 		else
+			puts "Unable to predict the intent by wit"
 			say(id,UNABLE_TO_GET_THE_CONTENT["#{@language}"])
 		end
 	end
@@ -138,6 +140,7 @@ class MessengerBot
 	#
 	def self.handle_postback(id,postback_payload)
 		typing_on(id)
+		puts "inside handle_postback"
 		begin
 			case postback_payload
 			when "GET_STARTED"
@@ -149,6 +152,9 @@ class MessengerBot
 				puts news_contents
 				post_template(id,news_contents)
 			when "FAQ"
+				faq_contents = get_faqs(@language)
+				puts faq_contents
+				post_template(id,faq_contents)
 			when "STATS"
 			when "HELPDESK_NUMBER"
 			when "PREVENTION_METHODS"
@@ -158,6 +164,7 @@ class MessengerBot
 				handle_get_summary_postbacks(id,postback_payload)
 			end
 		rescue
+			puts "Error occured inside handle_postback"
 			say(id,UNABLE_TO_GET_THE_CONTENT["#{@language}"])
 		end
 	end
@@ -173,6 +180,16 @@ class MessengerBot
 			end
 			say(id,summary)
 		end
+
+		if postback.include? "GET_FAQ_ANSWER_SUMMARY_"
+			uniqueId = postback.delete("GET_FAQ_ANSWER_SUMMARY_")
+			puts uniqueId 
+			answer = get_faqs_answer(uniqueId,@language)
+			if answer == nil
+				answer = UNABLE_TO_GET_THE_CONTENT["#{@language}"]
+			end
+			say(id, answer)
+		end
 	end
 
 	# Initial configuration for the bot 
@@ -181,18 +198,14 @@ class MessengerBot
 	greeting_response 		 =HTTParty.post(FB_PAGE,  headers: HEADER, body: GREETING.to_json )
 	get_started_response	 =HTTParty.post(FB_PAGE,  headers: HEADER, body: GET_STARTED.to_json)
 	persistent_menu_response =HTTParty.post(FB_PAGE, headers: HEADER, body: PERSISTENT_MENU.to_json)
-
+	
 	# Triggers whenever the bot gets any messages from the facebook user.
 	Bot.on :message do |message|
 		puts "Received a message: " + message.text
 		id = message.sender["id"]
 		typing_on(id)
 		set_language_value(id)
-
-				news_contents = get_news(@language)
-				puts news_contents
-				post_template(id,news_contents)
-		# handle_message(id,message.text)
+		handle_message(id,message.text)
 	end
 
 	# Triggers whenever the bot gets any postbacks from the facebook user.

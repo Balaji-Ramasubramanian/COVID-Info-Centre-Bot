@@ -7,6 +7,11 @@ class MessengerBot
 			    	"content_type": 'text',
 			    	"title": QUICK_REPLY_OPTIONS["News"]["ta"],
 			    	"payload": 'NEWS'
-			  	}
+			  	},
+			  	{
+		    	"content_type": 'text',
+		    	"title": QUICK_REPLY_OPTIONS["FAQ"]["ta"],
+		    	"payload": 'NEWS'
+		  	}
 	]
 end

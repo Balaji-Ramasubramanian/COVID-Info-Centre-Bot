@@ -12,9 +12,24 @@ class MessengerBot
           {
             "title": NEWS["en"],
             "type": "postback",
-            "payload": "RANDOM_ARTICLE"
+            "payload": "NEWS"
+          },
+          {
+            "title": FAQ["en"],
+            "type": "postback",
+            "payload": "FAQs"
+          },
+          {
+            "title": HELPDESK_NUMBER["en"],
+            "type": "postback",
+            "payload": "HELPDESK_NUMBER"
+          },
+          {
+            "title": ABOUT_THE_VIRUS["en"],
+            "type": "postback",
+            "payload": "ABOUT_THE_VIRUS"
           }
         ]
-      }
+    }
 
 end

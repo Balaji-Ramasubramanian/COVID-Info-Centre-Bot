@@ -7,14 +7,18 @@ require_relative 'strings'
 require_relative 'json_templates/template'
 
 
-
 class MessengerBot
+
+	# Get the news contents from api
+	def self.get_news_contents
+		news_response = HTTParty.get(NEWS_URL)
+		news_response = JSON[news_response.to_s]
+		return news_response["news"]
+	end
 
 	# Get the news from the specified url and parse it like a message card template
 	def self.get_news(language)
-		news_response = HTTParty.get(NEWS_URL)
-		news_response = JSON[news_response.to_s]
-		news_contents = news_response["news"]
+		news_contents = get_news_contents
 		news_template = GENERIC_TEMPLATE_BODY
 		elements = []
 		(0..9).each { |i|
@@ -30,7 +34,7 @@ class MessengerBot
 		            	{
 		              		"type": "postback",
 		              		"title": GET_SUMMARY_BUTTON["#{@language}"],
-		              		"payload": "GET_NEWS_SUMMARY_"+news_unique_id.to_s  # Add date value with the payload
+		              		"payload": "GET_NEWS_SUMMARY_"+news_unique_id.to_s  # Add uniqueid value with the payload
 		            	}
 		            ]
 		    }
@@ -42,9 +46,7 @@ class MessengerBot
 
 	# Get the news summary
 	def self.get_news_summary(uniqueId,language)
-		news_response = HTTParty.get(NEWS_URL)
-		news_response = JSON[news_response.to_s]
-		news_contents = news_response["news"]
+		news_contents = get_news_contents
 		elements = []
 		summary = nil
 		(0..9).each { |i|

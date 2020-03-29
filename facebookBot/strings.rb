@@ -20,6 +20,10 @@ class MessengerBot
 		"News" => {
 			"en" => "News",
 			"ta" => "செய்திகள்" 
+		},
+		"FAQ" => {
+			"en" => "FAQs",
+			"ta" => "கேள்விகள்"
 		}
 	}
 
@@ -47,6 +51,11 @@ class MessengerBot
 		"ta" => "நிகழ்ச்சி சுருக்கம்"
 	}
 
+	# Message Card button tests - Get Answer:
+	GET_FAQ_ANSWER_BUTTON = {
+		"en" => "Get Answer",
+		"ta" => "பதிலைக் காட்டு"
+	}
 	# Persistant menu button texts - Image Of The Day:
 	IMAGE_OF_THE_DAY_MESSAGE = {
 		"en" => "Image Of The Day",
@@ -59,6 +68,22 @@ class MessengerBot
 		"ta" => "செய்திகள்"
 	}
 
+	# Persistant menu button texts - FAQs
+	FAQ = {
+		"en" => "FAQs",
+		"ta" => "கேள்விகள்"
+	}
+
+	# Persistant menu button texts - HelpDesk number
+	HELPDESK_NUMBER = {
+		"en" => "HelpDesk Number",
+		"ta" => "உதவி மைய எண்"
+	}
+
+	ABOUT_THE_VIRUS = {
+		"en" => "About the virus",
+		"ta" => "வைரஸ் பற்றி"
+	}
  	# Button texts - Help:
  	HELP_BUTTON = {
  		"en" => "Help",
