@@ -4,10 +4,21 @@ Dir[File.join(__dir__, './quick_replies_strings', '*')].each { |file| require fi
 
 # @author Balaji
 class MessengerBot
-	# Quick replies menu contents
-	QUICK_REPLIES = {
- 		"en" => QUICK_REPLY_EN,
-  		"ta" => QUICK_REPLY_TA
-	}
+
+	def self.get_quick_replies(language)
+		quick_reply = [
+			  	{
+			    	"content_type": 'text',
+			    	"title": QUICK_REPLY_OPTIONS["News"]["#{language}"],
+			    	"payload": 'NEWS'
+			  	},
+			  	{
+		    	"content_type": 'text',
+		    	"title": QUICK_REPLY_OPTIONS["FAQ"]["#{language}"],
+		    	"payload": 'NEWS'
+		  	}
+		]
+		return quick_reply
+	end
 
 end

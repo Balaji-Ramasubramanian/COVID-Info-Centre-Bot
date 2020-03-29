@@ -2,7 +2,11 @@
 class MessengerBot
 
 	# Supported Languages
-	SUPPORTED_LANGUAGE = ["en", "ta"]
+	SUPPORTED_LANGUAGE = {
+		"en" => "default",
+		"ta" => "ta_IN"
+	}
+
 	# Greeting Text:
 	GREETING_MESSAGE = {
 		"en" => "Hey! This bot helps you to get the latest news about COVID-19, Get helpdesk numbers, or FAQs about the virus.",
@@ -24,6 +28,14 @@ class MessengerBot
 		"FAQ" => {
 			"en" => "FAQs",
 			"ta" => "கேள்விகள்"
+		},
+		"PREVENTION_METHODS" => {
+ 			"en" => "Prevention Methods",
+ 			"ta" => "தடுப்பு முறைகள்"
+ 		},
+ 		"HELPDESK_NUMBER" => {
+			"en" => "HelpDesk Number",
+			"ta" => "உதவி மைய எண்"
 		}
 	}
 
@@ -56,11 +68,6 @@ class MessengerBot
 		"en" => "Get Answer",
 		"ta" => "பதிலைக் காட்டு"
 	}
-	# Persistant menu button texts - Image Of The Day:
-	IMAGE_OF_THE_DAY_MESSAGE = {
-		"en" => "Image Of The Day",
-		"ta" => "இன்றைய சிறப்பு படம்"
-	}
 
 	# Persistant menu button texts - News:
 	NEWS = {
@@ -84,18 +91,24 @@ class MessengerBot
 		"en" => "About the virus",
 		"ta" => "வைரஸ் பற்றி"
 	}
+
+ 	# Persistant menu button texts  - More:
+ 	MORE = {
+ 		"en" => "More",
+ 		"ta" => "மேலும்"
+ 	}
+
+ 	# Persistant menu button texts - Prevention Methods
+ 	PREVENTION_METHODS = {
+ 		"en" => "Prevention Methods",
+ 		"ta" => "தடுப்பு முறைகள்"
+ 	}
+
  	# Button texts - Help:
  	HELP_BUTTON = {
  		"en" => "Help",
  		"ta" => "உதவி"
  	}
-
- 	# Button texts - More:
- 	MORE_BUTTON = {
- 		"en" => "More",
- 		"ta" => "மேலும்"
- 	}
-
 
  	# Error text - Uable to get the content
  	UNABLE_TO_GET_THE_CONTENT = {
