@@ -7,6 +7,7 @@ require_relative 'json_templates/persistent_menu'
 require_relative 'json_templates/get_started'
 require_relative 'json_templates/template'
 require_relative 'json_templates/quick_replies'
+require_relative './news.rb'
 require_relative 'strings'
 
 
@@ -144,7 +145,9 @@ class MessengerBot
 				say(id,greeting_message)
 				send_quick_reply(id)
 			when "NEWS"
-				say(id,"There is no latest news available right now")	#test message
+				news_contents = get_news(@language)
+				puts news_contents
+				post_template(id,news_contents)
 			when "FAQ"
 			when "STATS"
 			when "HELPDESK_NUMBER"
@@ -152,10 +155,23 @@ class MessengerBot
 			when "DOCTORS_ADVICE"
 			when "ABOUT_THE_VIRUS"
 			else
-				say(id,UNABLE_TO_GET_THE_CONTENT["#{@language}"])
+				handle_get_summary_postbacks(id,postback_payload)
 			end
 		rescue
 			say(id,UNABLE_TO_GET_THE_CONTENT["#{@language}"])
+		end
+	end
+
+	def self.handle_get_summary_postbacks(id,postback)
+		puts "inside handle summary"
+		if postback.include? "GET_NEWS_SUMMARY_"
+			uniqueId = postback.delete("GET_NEWS_SUMMARY_")
+			puts uniqueId
+			summary = get_news_summary(uniqueId,@language)
+			if summary == nil
+				summary = UNABLE_TO_GET_THE_CONTENT["#{@language}"]
+			end
+			say(id,summary)
 		end
 	end
 
@@ -172,7 +188,11 @@ class MessengerBot
 		id = message.sender["id"]
 		typing_on(id)
 		set_language_value(id)
-		handle_message(id,message.text)
+
+				news_contents = get_news(@language)
+				puts news_contents
+				post_template(id,news_contents)
+		# handle_message(id,message.text)
 	end
 
 	# Triggers whenever the bot gets any postbacks from the facebook user.
@@ -181,6 +201,21 @@ class MessengerBot
 		id = postback.sender["id"]
 		set_language_value(id)
 		handle_postback(id,postback.payload)
+	end
+
+	# @param id [Integer] The receiver's Facebook user ID.
+	# @param template [JSON] The MessageCard to be posted to user's Messager chat.
+	# @return [nil]
+	# This method helps to post the MessageCards that contains image,title,subtile & button.
+	#
+	def self.post_template(id,template)
+		message_options = {
+		"messaging_type": "RESPONSE",
+        "recipient": { "id": "#{id}"},
+        "message": "#{template.to_json}"
+        }
+		res = HTTParty.post(FB_MESSAGE, headers: HEADER, body: message_options.to_json)
+		puts res
 	end
 
 end
