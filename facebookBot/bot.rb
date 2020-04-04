@@ -22,15 +22,19 @@ class MessengerBot
 	# This method is used to get the user profile information from the Facebook.
 	#
 	def self.get_profile(id)
- 		fb_profile_url = FB_PROFILE + id + FB_PROFILE_FIELDS
- 		profile_details = HTTParty.get(fb_profile_url)
- 		@first_name = profile_details["first_name"]
- 		@last_name = profile_details["last_name"]
- 		@profile_pic = profile_details["profile_pic"]
- 		@locale = profile_details["locale"]
- 		@gender = profile_details["gender"]
- 		puts "Profile details : \nlocale : "+@locale +"\ngender : "+@gender
- 		return profile_details
+		begin 
+	 		fb_profile_url = FB_PROFILE + id + FB_PROFILE_FIELDS
+	 		profile_details = HTTParty.get(fb_profile_url)
+	 		@first_name = profile_details["first_name"]
+	 		@last_name = profile_details["last_name"]
+	 		@profile_pic = profile_details["profile_pic"]
+	 		@locale = profile_details["locale"]
+	 		@gender = profile_details["gender"]
+	 		puts "Profile details : \nlocale : "+@locale +"\ngender : "+@gender
+	 		return profile_details
+	 	rescue => e
+	 		puts "Error in get_profile" +e.to_s
+	 	end
  	end
 
  	# @param recipient_id [Integer] The receiver's Facebook user ID.
@@ -113,8 +117,8 @@ class MessengerBot
 			else
 				handle_wit_response(id,message)
 			end
-		rescue
-			puts "Error occured inside handle_message"
+		rescue => e 
+			puts "Error occured inside handle_message : " + e.to_s
 			say(id,UNABLE_TO_GET_THE_CONTENT["#{@language}"])
 		end
 	end
@@ -166,8 +170,8 @@ class MessengerBot
 			else
 				handle_get_summary_postbacks(id,postback_payload)
 			end
-		rescue
-			puts "Error occured inside handle_postback"
+		rescue => e
+			puts "Error occured inside handle_postback :" + e.to_s
 			say(id,UNABLE_TO_GET_THE_CONTENT["#{@language}"])
 		end
 	end
@@ -181,9 +185,7 @@ class MessengerBot
 				summary = UNABLE_TO_GET_THE_CONTENT["#{@language}"]
 			end
 			say(id,summary)
-		end
-
-		if postback.include? "GET_FAQ_ANSWER_SUMMARY_"
+		elsif postback.include? "GET_FAQ_ANSWER_SUMMARY_"
 			uniqueId = postback.delete("GET_FAQ_ANSWER_SUMMARY_")
 			puts "FAQ uniqueid: " + uniqueId 
 			answer = get_faqs_answer(uniqueId,@language)
@@ -191,6 +193,8 @@ class MessengerBot
 				answer = UNABLE_TO_GET_THE_CONTENT["#{@language}"]
 			end
 			say(id, answer)
+		else
+			send_quick_reply(id)
 		end
 	end
 
