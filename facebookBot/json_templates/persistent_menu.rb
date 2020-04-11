@@ -46,6 +46,11 @@ class MessengerBot
 	              "payload": "ABOUT_THE_VIRUS"
 	            },
 	            {
+	              "title": DOCTORS_ADVICE["#{language}"],
+	              "type": "postback",
+	              "payload": "DOCTORS_ADVICE"
+	            },
+	            {
 	              "title": PREVENTION_METHODS["#{language}"],
 	              "type": "postback",
 	              "payload": "PREVENTION_METHODS"

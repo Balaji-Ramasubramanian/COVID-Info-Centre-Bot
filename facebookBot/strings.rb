@@ -87,9 +87,16 @@ class MessengerBot
 		"ta" => "உதவி மைய எண்"
 	}
 
+	# Persistant menu button texts - About the virus
 	ABOUT_THE_VIRUS = {
 		"en" => "About The Virus",
 		"ta" => "வைரஸ் பற்றி"
+	}
+
+	# Persistant menu button texts - Doctors Advice
+	DOCTORS_ADVICE = {
+		"en" => "Doctors Advice",
+		"ta" => "மருத்துவர்கள் அறிவுறுத்தல்"
 	}
 
  	# Persistant menu button texts  - More:
