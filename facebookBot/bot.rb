@@ -10,6 +10,8 @@ require_relative 'json_templates/quick_replies'
 require_relative './news.rb'
 require_relative './faq.rb'
 require_relative './helpdesk_number'
+require_relative './doctors_advice'
+require_relative './prevention_methods'
 require_relative 'strings'
 
 
@@ -154,18 +156,22 @@ class MessengerBot
 				say(id,greeting_message)
 				send_quick_reply(id)
 			when "NEWS"
-				news_contents = get_news(@language)
-				post_template(id,news_contents)
+				# news_contents = get_news(@language)
+				post_template(id,get_news(@language))
 			when "FAQ"
-				faq_contents = get_faqs(@language)
-				post_template(id,faq_contents)
+				# faq_contents = get_faqs(@language)
+				post_template(id,get_faqs(@language))
 			when "STATS"
 			when "HELPDESK_NUMBER"
-				say(id,get_helpdesk_number(@language))
+				post_helpdesk_number(id,@language)
 			when "MAIN_MENU"
 				send_quick_reply(id)
 			when "PREVENTION_METHODS"
+				# precaution_contents = get_prevention_methods(@language)
+				post_template(id,get_prevention_methods(@language))
 			when "DOCTORS_ADVICE"
+				# doctors_advice = get_doctors_advice(@language)
+				post_template(id,get_doctors_advice(@language))
 			when "ABOUT_THE_VIRUS"
 			else
 				handle_get_summary_postbacks(id,postback_payload)
@@ -180,22 +186,27 @@ class MessengerBot
 		if postback.include? "GET_NEWS_SUMMARY_"
 			uniqueId = postback.delete("GET_NEWS_SUMMARY_")
 			puts "Get news summary uniqueid: " + uniqueId
-			summary = get_news_summary(uniqueId,@language)
-			if summary == nil
-				summary = UNABLE_TO_GET_THE_CONTENT["#{@language}"]
-			end
-			say(id,summary)
+			answer = get_news_summary(uniqueId,@language)
 		elsif postback.include? "GET_FAQ_ANSWER_SUMMARY_"
 			uniqueId = postback.delete("GET_FAQ_ANSWER_SUMMARY_")
 			puts "FAQ uniqueid: " + uniqueId 
 			answer = get_faqs_answer(uniqueId,@language)
-			if answer == nil
-				answer = UNABLE_TO_GET_THE_CONTENT["#{@language}"]
-			end
-			say(id, answer)
+		elsif postback.include? "GET_PREVENTION_SUMMARY_"
+			uniqueId = postback.delete("GET_PREVENTION_SUMMARY_")
+			puts "PREVENTION_METHODS uniqueid: " + uniqueId 
+			answer = get_prevention_methods_summary(uniqueId,@language)
+		elsif postback.include? "GET_DOCTORS_ADVICE_SUMMARY_"
+			uniqueId = postback.delete("GET_DOCTORS_ADVICE_SUMMARY_")
+			puts "GET_DOCTORS_ADVICE_SUMMARY uniqueId : " + uniqueId
+			answer = get_doctors_advice_summary(uniqueId,@language)
 		else
 			send_quick_reply(id)
+			return
 		end
+		if answer == nil
+				answer = UNABLE_TO_GET_THE_CONTENT["#{@language}"]
+		end
+		say(id, answer)	
 	end
 
 	# Initial configuration for the bot 

@@ -8,10 +8,18 @@ require_relative 'json_templates/template'
 
 class MessengerBot
 
-	def self.get_faqs(language)
+	def self.get_faq_contents
 		begin
 			faq_response = JSON[HTTParty.get(FAQ_URL).to_s]
-			faq_contents = faq_response["faqs"]
+			return faq_response["faQs"]
+		rescue Exception => e
+			
+		end
+	end
+
+	def self.get_faqs(language)
+		begin
+			faq_contents = get_faq_contents
 			puts "FAQ Contents: #{faq_contents}"
 			faq_template = GENERIC_TEMPLATE_BODY
 			elements = []
@@ -34,15 +42,14 @@ class MessengerBot
 			}
 			faq_template[:attachment][:payload][:elements] = elements
 			return faq_template
-		rescue =>
+		rescue => e
 			puts "Error in get_faqs : "+ e.to_s
 		end
 	end
 
 	def self.get_faqs_answer(uniqueId,language)
 		begin
-			faq_response = JSON[HTTParty.get(FAQ_URL).to_s]
-			faq_contents = faq_response["faqs"]
+			faq_contents = get_faq_contents
 			puts "FAQ Contents: #{faq_contents}"
 			elements = []
 			summary = nil

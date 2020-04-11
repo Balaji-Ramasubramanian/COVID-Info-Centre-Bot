@@ -9,11 +9,19 @@ require_relative 'json_templates/template'
 
 class MessengerBot
 
+	def self.get_news_contents
+		begin
+			news_response = JSON.parse(HTTParty.get(NEWS_URL).to_s)
+	 		return news_response["news"]
+		rescue Exception => e
+			puts "Error in get_news_contents : " + e.to_s
+		end
+	end
+
 	# Get the news from the specified url and parse it like a message card template
 	def self.get_news(language)
 		begin
-			news_response = JSON.parse(HTTParty.get(NEWS_URL).to_s)
-	 		news_contents = news_response["news"]
+			news_contents = get_news_contents
 			news_template = GENERIC_TEMPLATE_BODY
 			elements = []
 			(0..9).each { |i|
@@ -45,8 +53,7 @@ class MessengerBot
 	# Get the news summary
 	def self.get_news_summary(uniqueId,language)
 		begin
-			news_response = JSON[HTTParty.get(NEWS_URL).to_s]
-	 		news_contents = news_response["news"]
+			news_contents = get_news_contents
 	 		puts "News Contents: #{news_contents}"
 			elements = []
 			summary = nil
