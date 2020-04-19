@@ -156,10 +156,8 @@ class MessengerBot
 				say(id,greeting_message)
 				send_quick_reply(id)
 			when "NEWS"
-				# news_contents = get_news(@language)
 				post_template(id,get_news(@language))
 			when "FAQ"
-				# faq_contents = get_faqs(@language)
 				post_template(id,get_faqs(@language))
 			when "STATS"
 			when "HELPDESK_NUMBER"
@@ -167,10 +165,8 @@ class MessengerBot
 			when "MAIN_MENU"
 				send_quick_reply(id)
 			when "PREVENTION_METHODS"
-				# precaution_contents = get_prevention_methods(@language)
 				post_template(id,get_prevention_methods(@language))
 			when "DOCTORS_ADVICE"
-				# doctors_advice = get_doctors_advice(@language)
 				post_template(id,get_doctors_advice(@language))
 			when "ABOUT_THE_VIRUS"
 			else
