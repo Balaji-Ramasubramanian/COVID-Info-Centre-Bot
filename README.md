@@ -57,6 +57,21 @@ You need to change the **.env** file with your appropriate access tokens, userna
 - App secret token
 - Wit access token
 
+## Setting up the API endpoints for data input
+For data input you can use API endpoint. If you're using sheets for data input. You can use sheets to API convertor like [Sheety](https://sheety.co).
+
+You can refer [this google sheet](https://docs.google.com/spreadsheets/d/1jMe52ja-41TYFqgeTGw1A8WYcqeiJICt6t84HuJp-fI/edit) for input data reference.
+
+The API endpoints should be set in `apiendpoints.rb` file.
+The following endpoints shoud be present
+
+    NEWS_URL=#News endpoint
+    FAQ_URL=#FAQ endpoint
+    HELPDESK_NUMBER_URL=#Helpdesk instructions endpoint
+    ABOUT_THE_VIRUS_URL=# About the virus
+    DOCTORS_ADVICE_URL=#Doctors advice
+    PREVENTION_METHODS_URL=#Advice by doctors
+
 ## Deploying your app:
 
 #### Test your project locally
